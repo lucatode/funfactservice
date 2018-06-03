@@ -8,6 +8,17 @@ public class Post {
     private final String link;
     private final String img;
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", link='" + link + '\'' +
+                ", img='" + img + '\'' +
+                '}';
+    }
+
     public Post(PostBuilder builder) {
         this.id = builder.id;
         this.title = builder.title;

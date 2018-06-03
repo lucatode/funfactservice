@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface MessageProvider {
 
-    List<Post> GetPosts();
+    List<Post> GetPosts(String url);
+
 }

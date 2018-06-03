@@ -2,6 +2,7 @@ package com.lucatode.funfactservice;
 
 import com.lucatode.funfactservice.Entity.Child;
 import com.lucatode.funfactservice.Entity.Example;
+import com.lucatode.funfactservice.adapter.reddit.RedditMessageProvider;
 import com.lucatode.funfactservice.domain.entity.Post;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -37,17 +38,20 @@ public class FunFactServiceApplication {
 		//Notify First
 
 		//Sleep
-		//String url = "https://www.reddit.com/r/gifs/new.json";
+		String url = "https://www.reddit.com/r/gifs/new.json";
 		//GetPosts(url);
 
 		while(true){
 
 			System.out.println(getDateTime());
+			RedditMessageProvider rmp = new RedditMessageProvider();
+			rmp.GetPosts(url).forEach(post -> System.out.println(post.toString()));
 
 
 
 
-			Thread.sleep(5*(1000));
+
+			Thread.sleep(35*(1000));
 		}
 
 	}
@@ -56,54 +60,7 @@ public class FunFactServiceApplication {
 		return new Date().toString();
 	}
 
-	private static List<Post> GetPosts(String url) throws IOException {
-		StringBuffer result = getGetCallResult(url);
 
-		ObjectMapper mapper = new ObjectMapper();
-		Example s = mapper.readValue(result.toString(), Example.class);
-
-		List<Post> posts = new ArrayList<>();
-		List<Child> children = s.getData().getChildren();
-		children.sort( (c1,c2) -> c2.getData().getUps() - c1.getData().getUps());
-		children.forEach( c -> {
-
-			posts.add(
-				new Post.PostBuilder()
-					.withId(c.getData().getId())
-					.withTitle(c.getData().getTitle())
-					.withBody(c.getData().getSelftext())
-					.withImg("")
-					.withLink(c.getData().getUrl())
-					.build()
-			);
-		});
-
-		return posts;
-	}
-
-	private static StringBuffer getGetCallResult(String url) throws IOException {
-		// Create an instance of HttpClient.
-		HttpClient client = HttpClientBuilder.create().build();
-
-		HttpGet request = new HttpGet(url);
-
-		// add request header
-		request.addHeader("User-Agent", USER_AGENT);
-		HttpResponse response = client.execute(request);
-
-		System.out.println("Response Code : "
-				+ response.getStatusLine().getStatusCode());
-
-		BufferedReader rd = new BufferedReader(
-				new InputStreamReader(response.getEntity().getContent()));
-
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		return result;
-	}
 
 
 }
