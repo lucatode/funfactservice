@@ -1,23 +1,19 @@
 package com.lucatode.funfactservice.adapter.logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lucatode.funfactservice.adapter.http.HttpPostClient;
 import com.lucatode.funfactservice.domain.entity.LogMessage;
 import com.lucatode.funfactservice.domain.repository.Logger;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
-import java.io.IOException;
 import java.util.Date;
 
 public class FirebaseLogger implements Logger {
 
+    private final HttpPostClient client;
     private final String url;
 
-    public FirebaseLogger(String url) {
+    public FirebaseLogger(HttpPostClient client, String url) {
+        this.client = client;
         this.url = url;
     }
 
@@ -47,24 +43,12 @@ public class FirebaseLogger implements Logger {
         ObjectMapper mapper = new ObjectMapper();
         try{
             String json =  mapper.writeValueAsString(message);
-            DoPostCall(url, json);
+            client.postJson(url, json);
         }catch (Exception e){ }
     }
 
 
-    public int DoPostCall(String url, String json) throws IOException {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(url);
-        StringEntity entity = new StringEntity(json);
-        httpPost.setEntity(entity);
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
 
-        CloseableHttpResponse response = client.execute(httpPost);
-        int statusCode = response.getStatusLine().getStatusCode();
-        client.close();
-        return statusCode;
-    }
 
 
 }
