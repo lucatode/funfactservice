@@ -1,4 +1,4 @@
-package com.lucatode.funfactservice.Entity;
+package com.lucatode.funfactservice.adapter.reddit.Entity;
 
 import java.util.HashMap;
 import java.util.Map;

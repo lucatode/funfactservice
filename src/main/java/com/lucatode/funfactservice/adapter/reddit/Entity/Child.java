@@ -1,20 +1,22 @@
-package com.lucatode.funfactservice.Entity;
+package com.lucatode.funfactservice.adapter.reddit.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.codehaus.jackson.annotate.*;
+
 
 @JsonPropertyOrder({
     "kind",
     "data"
 })
-public class Example {
+public class Child {
 
     @JsonProperty("kind")
     private String kind;
     @JsonProperty("data")
-    private Data data;
+    private Data_ data;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -29,12 +31,12 @@ public class Example {
     }
 
     @JsonProperty("data")
-    public Data getData() {
+    public Data_ getData() {
         return data;
     }
 
     @JsonProperty("data")
-    public void setData(Data data) {
+    public void setData(Data_ data) {
         this.data = data;
     }
 
