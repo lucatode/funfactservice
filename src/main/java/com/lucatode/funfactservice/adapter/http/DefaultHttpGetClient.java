@@ -13,7 +13,7 @@ import static org.apache.http.protocol.HTTP.USER_AGENT;
 
 public class DefaultHttpGetClient implements HttpGetClient {
     @Override
-    public JsonParser getGetCallResult(String url){
+    public String getGetCallResult(String url){
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
         request.addHeader("User-Agent", USER_AGENT);
