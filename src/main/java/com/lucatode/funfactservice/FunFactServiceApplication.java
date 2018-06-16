@@ -19,18 +19,14 @@ import java.util.concurrent.TimeUnit;
 @SpringBootApplication
 public class FunFactServiceApplication {
 
-  private static String EROGATED_POSTS_REPOSITORY = "https://xxxxxxxxxxxxx.firebaseio.com/erogated_posts.json";
-  private static String REDDIT_POSTS_TARGET = "https://www.reddit.com/r/MemeEconomy/new.json";
-  private static String CHANNEL_URL = "https://xxxxxxxxxxxxxxxxxxxxx/notify/reddit";
-  private static String LOGGER_URL = "https://xxxxxxxxxxxxx.firebaseio.com/reddit_logger.json";
 
   public static void main(String[] args) throws Exception {
 
     Map<String, String> env = System.getenv();
-    EROGATED_POSTS_REPOSITORY = env.get(EROGATED_POSTS_REPOSITORY);
-    REDDIT_POSTS_TARGET = env.get(REDDIT_POSTS_TARGET);
-    CHANNEL_URL = env.get(CHANNEL_URL);
-    LOGGER_URL = env.get(LOGGER_URL);
+    String EROGATED_POSTS_REPOSITORY = env.get("EROGATED_POSTS_REPOSITORY");
+    String REDDIT_POSTS_TARGET = env.get("REDDIT_POSTS_TARGET");
+    String CHANNEL_URL = env.get("CHANNEL_URL");
+    String LOGGER_URL = env.get("CHANNEL_URL");
 
     Logger logger = new FirebaseLogger(new DefaultHttpPostClient(LOGGER_URL));
     logger.info("[MAIN]","Start");
