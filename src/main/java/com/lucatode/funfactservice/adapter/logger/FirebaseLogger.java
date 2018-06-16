@@ -4,17 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lucatode.funfactservice.adapter.http.HttpPostClient;
 import com.lucatode.funfactservice.domain.entity.LogMessage;
 import com.lucatode.funfactservice.domain.repository.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class FirebaseLogger implements Logger {
 
     private final HttpPostClient client;
-    private final String url;
 
-    public FirebaseLogger(HttpPostClient client, String url) {
+    @Autowired
+    public FirebaseLogger(HttpPostClient client) {
         this.client = client;
-        this.url = url;
     }
 
     @Override
@@ -43,8 +45,10 @@ public class FirebaseLogger implements Logger {
         ObjectMapper mapper = new ObjectMapper();
         try{
             String json =  mapper.writeValueAsString(message);
-            client.postJson(url, json);
-        }catch (Exception e){ }
+            client.postJson(json);
+        }catch (Exception e){
+          System.out.println(e.getMessage());
+        }
     }
 
 
