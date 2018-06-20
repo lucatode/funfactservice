@@ -34,7 +34,7 @@ public class RedditTaskTests {
     when(redditErogatedPostRepository.getPostById("ABCD01")).thenReturn(abcd01);
     doNothing().when(redditErogatedPostRepository).trackErogatedPost(abcd01);
     doNothing().when(postErogator).erogate(abcd01);
-    redditTask = new RedditTask(redditErogatedPostRepository, redditMessageProvider, postErogator, "");
+    redditTask = new RedditTask(redditErogatedPostRepository, redditMessageProvider, postErogator, logger, "");
   }
 
   @Test

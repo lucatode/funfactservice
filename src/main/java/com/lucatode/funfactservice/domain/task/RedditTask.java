@@ -22,12 +22,12 @@ public class RedditTask extends TimerTask {
   public RedditTask(
           RedditErogatedPostRepository redditErogatedPostRepository,
           RedditMessageProvider redditMessageProvider,
-          PostErogator postErogator, String url)
+          PostErogator postErogator, Logger logger, String url)
   {
     this.redditErogatedPostRepository = redditErogatedPostRepository;
     this.redditMessageProvider = redditMessageProvider;
     this.postErogator = postErogator;
-
+    this.logger = logger;
     this.url = url;
   }
 

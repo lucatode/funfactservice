@@ -40,7 +40,7 @@ public class FunFactServiceApplication {
     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     scheduler.scheduleAtFixedRate(
-            new RedditTask(redditErogatedPostRepository, redditMessageProvider, postErogator, REDDIT_POSTS_TARGET),
+            new RedditTask(redditErogatedPostRepository, redditMessageProvider, postErogator, logger, REDDIT_POSTS_TARGET),
             0,
             30,
             TimeUnit.MINUTES
