@@ -33,17 +33,19 @@ public class RedditTask extends TimerTask {
 
   @Override
   public void run() {
-
+    logger.info("Reddit Task", "Starting Reddit Task");
 
     final List<Post> posts = redditMessageProvider.GetPosts(url);
     for (Post post : posts) {
       if(redditErogatedPostRepository.getPostById(post.getId()) == null){
         postErogator.erogate(post);
         redditErogatedPostRepository.trackErogatedPost(post);
+        logger.info("Reddit Task", "Post erogated");
         break;
       }
 
     }
+
 
 
   }

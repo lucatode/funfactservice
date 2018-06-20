@@ -25,7 +25,8 @@ public class PostDispatcher implements PostErogator {
   public void erogate(Post toErogate) {
     try{
 
-      final NotificationMessage notificationMessage = new NotificationMessage("reddit", "funfactservice", toErogate.getLink());
+      final NotificationMessage notificationMessage =
+              new NotificationMessage("17DF3DF522AA1E991587D2E747404B958224F8A1CC53A1A2154060F5D75BEEEC", "funfactservice", toErogate.getLink());
       defaultHttpPostClient.postJson(notificationMessage.toJson());
     }catch(Exception e){
       logger.err("POST_DISPATCHER", e.getMessage());
@@ -39,7 +40,7 @@ public class PostDispatcher implements PostErogator {
     String Message;
 
     public NotificationMessage(String key, String source, String message) {
-      Key = "17DF3DF522AA1E991587D2E747404B958224F8A1CC53A1A2154060F5D75BEEEC";
+      Key = key;
       Source = source;
       Message = message;
     }
