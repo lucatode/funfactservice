@@ -1,7 +1,7 @@
 package com.lucatode.funfactservice.domain.task;
 
 import com.lucatode.funfactservice.adapter.reddit.RedditMessageProvider;
-import com.lucatode.funfactservice.adapter.reddit.repository.RedditErogatedPostRepository;
+import com.lucatode.funfactservice.adapter.reddit.repository.RedditPostRepository;
 import com.lucatode.funfactservice.domain.PostErogator;
 import com.lucatode.funfactservice.domain.entity.Post;
 import com.lucatode.funfactservice.domain.repository.Logger;
@@ -12,7 +12,8 @@ import java.util.TimerTask;
 
 public class RedditTask extends TimerTask {
 
-  private RedditErogatedPostRepository redditErogatedPostRepository;
+  private RedditPostRepository redditErogatedPostRepository;
+  private RedditPostRepository redditPostPoolRepository;
   private RedditMessageProvider redditMessageProvider;
   private PostErogator postErogator;
   private Logger logger;
@@ -20,11 +21,12 @@ public class RedditTask extends TimerTask {
 
   @Autowired
   public RedditTask(
-          RedditErogatedPostRepository redditErogatedPostRepository,
-          RedditMessageProvider redditMessageProvider,
+          RedditPostRepository redditErogatedPostRepository,
+          RedditPostRepository redditPostPoolRepository, RedditMessageProvider redditMessageProvider,
           PostErogator postErogator, Logger logger, String url)
   {
     this.redditErogatedPostRepository = redditErogatedPostRepository;
+    this.redditPostPoolRepository = redditPostPoolRepository;
     this.redditMessageProvider = redditMessageProvider;
     this.postErogator = postErogator;
     this.logger = logger;
@@ -39,10 +41,12 @@ public class RedditTask extends TimerTask {
     for (Post post : posts) {
       if(redditErogatedPostRepository.getPostById(post.getId()) == null){
         postErogator.erogate(post);
-        redditErogatedPostRepository.trackErogatedPost(post);
+        redditErogatedPostRepository.pushPost(post);
         logger.info("Reddit Task", "Post erogated");
         break;
       }
+      //get push next five in pool
+
 
     }
 

@@ -1,7 +1,7 @@
 package com.lucatode.funfactservice.domain.task;
 
 import com.lucatode.funfactservice.adapter.reddit.RedditMessageProvider;
-import com.lucatode.funfactservice.adapter.reddit.repository.RedditErogatedPostRepository;
+import com.lucatode.funfactservice.adapter.reddit.repository.RedditPostRepository;
 import com.lucatode.funfactservice.domain.PostErogator;
 import com.lucatode.funfactservice.domain.entity.Post;
 import com.lucatode.funfactservice.domain.repository.Logger;
@@ -23,7 +23,9 @@ public class RedditTaskTests {
   private RedditTask redditTask;
 
   @Mock
-  private RedditErogatedPostRepository redditErogatedPostRepository;
+  private RedditPostRepository redditPostRepository;
+  @Mock
+  private RedditPostRepository redditPostPoolRepository;
   @Mock
   private RedditMessageProvider redditMessageProvider;
   @Mock
@@ -35,10 +37,10 @@ public class RedditTaskTests {
   public void setup(){
     final Post abcd01 = new Post.PostBuilder().withId("ABCD01").build();
     when(redditMessageProvider.GetPosts(any(String.class))).thenReturn(Arrays.asList(abcd01));
-    when(redditErogatedPostRepository.getPostById("ABCD01")).thenReturn(abcd01);
-    doNothing().when(redditErogatedPostRepository).trackErogatedPost(abcd01);
+    when(redditPostRepository.getPostById("ABCD01")).thenReturn(abcd01);
+    doNothing().when(redditPostRepository).pushPost(abcd01);
     doNothing().when(postErogator).erogate(abcd01);
-    redditTask = new RedditTask(redditErogatedPostRepository, redditMessageProvider, postErogator, logger, "");
+    redditTask = new RedditTask(redditPostRepository, redditPostPoolRepository, redditMessageProvider, postErogator, logger, "");
   }
 
   @Test
@@ -50,13 +52,13 @@ public class RedditTaskTests {
   @Test
   public void PostRepositoryIsUsedForRead(){
     redditTask.run();
-    verify(redditErogatedPostRepository, times(1)).getPostById(any(String.class));
+    verify(redditPostRepository, times(1)).getPostById(any(String.class));
   }
 
   @Test
   public void PostRepositoryIsUsedForWrite(){
     redditTask.run();
-    verify(redditErogatedPostRepository, times(1)).getPostById(any(String.class));
+    verify(redditPostRepository, times(1)).getPostById(any(String.class));
   }
 
   @Test

@@ -4,7 +4,6 @@ import com.lucatode.funfactservice.adapter.http.HttpGetClient;
 import com.lucatode.funfactservice.adapter.http.HttpPostClient;
 import com.lucatode.funfactservice.domain.entity.Post;
 import com.lucatode.funfactservice.domain.repository.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RedditErogatedPostRepositoryTest {
+public class RedditPostRepositoryTest {
 
   @Mock
   private HttpGetClient client;
@@ -27,12 +26,12 @@ public class RedditErogatedPostRepositoryTest {
   @Mock
   private Logger logger;
 
-  private RedditErogatedPostRepository repo;
+  private RedditPostRepository repo;
 
   @Before
   public void setup() throws IOException {
     when(client.getGetCallResult()).thenReturn(POST_LIST_JSON_EXAMPLE);
-    repo = new RedditErogatedPostRepository(client, postClient, logger);
+    repo = new RedditPostRepository(client, postClient, logger);
   }
 
   @Test

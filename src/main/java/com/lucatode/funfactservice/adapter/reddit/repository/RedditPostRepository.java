@@ -12,14 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RedditErogatedPostRepository {
+public class RedditPostRepository {
 
 
   private final HttpGetClient getClient;
   private final HttpPostClient postClient;
   private final Logger logger;
 
-  public RedditErogatedPostRepository(HttpGetClient getClient, HttpPostClient postClient, Logger logger) {
+  public RedditPostRepository(HttpGetClient getClient, HttpPostClient postClient, Logger logger) {
     this.getClient = getClient;
     this.postClient = postClient;
     this.logger = logger;
@@ -69,9 +69,9 @@ public class RedditErogatedPostRepository {
     return null;
   }
 
-  public void trackErogatedPost(Post toErogate) {
+  public void pushPost(Post post) {
     try{
-      postClient.postJson(toErogate.toJson());
+      postClient.postJson(post.toJson());
     }catch (Exception e){
       //
     }
