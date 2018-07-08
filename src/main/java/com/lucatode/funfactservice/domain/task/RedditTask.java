@@ -22,7 +22,8 @@ public class RedditTask extends TimerTask {
   @Autowired
   public RedditTask(
           RedditPostRepository redditErogatedPostRepository,
-          RedditPostRepository redditPostPoolRepository, RedditMessageProvider redditMessageProvider,
+          RedditPostRepository redditPostPoolRepository,
+          RedditMessageProvider redditMessageProvider,
           PostErogator postErogator, Logger logger, String url)
   {
     this.redditErogatedPostRepository = redditErogatedPostRepository;
@@ -38,6 +39,15 @@ public class RedditTask extends TimerTask {
     logger.info("Reddit Task", "Starting Reddit Task");
 
     final List<Post> posts = redditMessageProvider.GetPosts(url);
+    ErogateAPost(posts);
+    SaveOnPool(posts);
+  }
+
+  private void SaveOnPool(List<Post> posts) {
+
+  }
+
+  private void ErogateAPost(List<Post> posts){
     for (Post post : posts) {
       if(redditErogatedPostRepository.getPostById(post.getId()) == null){
         postErogator.erogate(post);
@@ -45,12 +55,6 @@ public class RedditTask extends TimerTask {
         logger.info("Reddit Task", "Post erogated");
         break;
       }
-      //get push next five in pool
-
-
     }
-
-
-
   }
 }

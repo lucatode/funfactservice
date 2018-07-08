@@ -4,45 +4,59 @@ import com.lucatode.funfactservice.adapter.http.HttpGetClient;
 import com.lucatode.funfactservice.adapter.http.HttpPostClient;
 import com.lucatode.funfactservice.domain.entity.Post;
 import com.lucatode.funfactservice.domain.repository.Logger;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class RedditPostRepository {
 
-
-  private final HttpGetClient getClient;
-  private final HttpPostClient postClient;
+  private final String connectionString;
   private final Logger logger;
 
-  public RedditPostRepository(HttpGetClient getClient, HttpPostClient postClient, Logger logger) {
-    this.getClient = getClient;
-    this.postClient = postClient;
+  public RedditPostRepository(String connectionString, Logger logger) {
+    this.connectionString = connectionString;
     this.logger = logger;
   }
 
   public List<Post> GetPosts() {
+    MongoClientURI uri = new MongoClientURI(connectionString);
+    MongoClient mongoClient = new MongoClient(uri);
+    MongoDatabase database = mongoClient.getDatabase("funfacts");
+    MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+    MongoCursor<Document> cursor = collection.find().iterator();
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("[");
+    try {
+      while (cursor.hasNext()) {
+        stringBuilder.append(cursor.next().toJson());
+        stringBuilder.append(",");
+      }
+    } finally {
+      stringBuilder.deleteCharAt( stringBuilder.length() - 1 );
+      cursor.close();
+    }
+    stringBuilder.append("]");
+    return convertToPosts(stringBuilder.toString());
+  }
+
+  private List<Post> convertToPosts(String postsJson) {
     ObjectMapper mapper = new ObjectMapper();
     TypeReference<Post[]> typeRef = new TypeReference<Post[]>() {
     };
-    String callResult = getClient.getGetCallResult();
-      String unwrapped = callResult.substring(1,callResult.length()-1);
-    final String[] split = unwrapped.split("\\{(.*?)\\}");
-    final StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("[");
-    for (String s : split) {
-      unwrapped = unwrapped.replace(s, "");
-    }
-    unwrapped = unwrapped.replace("}{", "},{");
-    stringBuilder.append(unwrapped);
-    stringBuilder.append("]");
     Post[] posts = new Post[0];
     try {
-      posts = mapper.readValue(stringBuilder.toString(), typeRef);
+      posts = mapper.readValue(postsJson, typeRef);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -71,7 +85,12 @@ public class RedditPostRepository {
 
   public void pushPost(Post post) {
     try{
-      postClient.postJson(post.toJson());
+      Document document = PostBson.PostBsonBuilder.aPostBson().fromPost(post).build().toDocument();
+      MongoClientURI uri = new MongoClientURI(connectionString);
+      MongoClient mongoClient = new MongoClient(uri);
+      MongoDatabase database = mongoClient.getDatabase("funfacts");
+      MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+      collection.insertOne(document);
     }catch (Exception e){
       //
     }
