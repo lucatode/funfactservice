@@ -40,7 +40,7 @@ public class RedditMessageProvider implements MessageProvider {
                                 .withId(c.getData().getId())
                                 .withTitle(c.getData().getTitle())
                                 .withBody(c.getData().getSelftext())
-                                .withImg("")
+                                .withImg(c.getData().getThumbnail())
                                 .withLink(c.getData().getUrl())
                                 .build()
                 );
