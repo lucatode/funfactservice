@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class RedditTask extends TimerTask {
 
@@ -44,7 +45,10 @@ public class RedditTask extends TimerTask {
   }
 
   private void SaveOnPool(List<Post> posts) {
-
+    posts.stream()
+            .filter(p -> redditPostPoolRepository.getPostById(p.getId()) == null)
+            .limit(5)
+            .forEach(p -> redditPostPoolRepository.pushPost(p));
   }
 
   private void ErogateAPost(List<Post> posts){

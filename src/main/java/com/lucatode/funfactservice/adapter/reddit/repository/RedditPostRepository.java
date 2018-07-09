@@ -24,10 +24,12 @@ import static com.mongodb.client.model.Filters.eq;
 public class RedditPostRepository {
 
   private final String connectionString;
+  private final String collectionName;
   private final Logger logger;
 
-  public RedditPostRepository(String connectionString, Logger logger) {
+  public RedditPostRepository(String connectionString, String collectionName, Logger logger) {
     this.connectionString = connectionString;
+    this.collectionName = collectionName;
     this.logger = logger;
   }
 
@@ -35,7 +37,7 @@ public class RedditPostRepository {
     MongoClientURI uri = new MongoClientURI(connectionString);
     MongoClient mongoClient = new MongoClient(uri);
     MongoDatabase database = mongoClient.getDatabase("funfacts");
-    MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+    MongoCollection<Document> collection = database.getCollection(collectionName);
     MongoCursor<Document> cursor = collection.find().iterator();
 
     List<Post> list = new ArrayList<>();
@@ -76,7 +78,7 @@ public class RedditPostRepository {
       MongoClientURI uri = new MongoClientURI(connectionString);
       MongoClient mongoClient = new MongoClient(uri);
       MongoDatabase database = mongoClient.getDatabase("funfacts");
-      MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+      MongoCollection<Document> collection = database.getCollection(collectionName);
       Document doc = collection.find(eq("id", id)).first();
       if(doc != null){
         return PostBson.PostBsonBuilder.aPostBson().fromDocument(doc).build().toPost();
@@ -94,7 +96,7 @@ public class RedditPostRepository {
       MongoClientURI uri = new MongoClientURI(connectionString);
       MongoClient mongoClient = new MongoClient(uri);
       MongoDatabase database = mongoClient.getDatabase("funfacts");
-      MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+      MongoCollection<Document> collection = database.getCollection(collectionName);
       collection.insertOne(document);
     }catch (Exception e){
       //

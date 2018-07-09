@@ -33,7 +33,7 @@ public class RedditPostRepositoryTest {
   public void setup() throws IOException {
     Map<String, String> env = System.getenv();
 
-    repo = new RedditPostRepository(env.get("EROGATED_POSTS_REPOSITORY"), logger);
+    repo = new RedditPostRepository(env.get("EROGATED_POSTS_REPOSITORY"),"erogatedPost", logger);
   }
 
   @Test

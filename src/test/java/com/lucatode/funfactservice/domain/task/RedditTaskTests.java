@@ -1,5 +1,6 @@
 package com.lucatode.funfactservice.domain.task;
 
+import com.lucatode.funfactservice.adapter.http.DefaultHttpGetClient;
 import com.lucatode.funfactservice.adapter.reddit.RedditMessageProvider;
 import com.lucatode.funfactservice.adapter.reddit.repository.RedditPostRepository;
 import com.lucatode.funfactservice.domain.PostErogator;
@@ -13,7 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -59,6 +62,18 @@ public class RedditTaskTests {
   public void PostRepositoryIsUsedForWrite(){
     redditTask.run();
     verify(redditPostRepository, times(1)).getPostById(any(String.class));
+  }
+
+  @Test
+  public void SaveOnPool(){
+    Map<String, String> env = System.getenv();
+    String POSTS_POOL_REPOSITORY = env.get("POSTS_POOL_REPOSITORY");
+    RedditMessageProvider redditMessageProviderIT = new RedditMessageProvider(new DefaultHttpGetClient("https://www.reddit.com/r/gifs/new.json"), logger);
+    RedditPostRepository redditPoolRepositoryIT = new RedditPostRepository(POSTS_POOL_REPOSITORY,"postPool", logger);
+    redditTask = new RedditTask(redditPostRepository, redditPoolRepositoryIT, redditMessageProviderIT, postErogator, logger, "");
+    redditTask.run();
+
+    assertEquals(5,redditPoolRepositoryIT.GetPosts().size());
   }
 
   @Test

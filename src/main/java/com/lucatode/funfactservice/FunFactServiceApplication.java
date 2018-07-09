@@ -32,9 +32,9 @@ public class FunFactServiceApplication {
     Logger logger = new FirebaseLogger(new DefaultHttpPostClient(LOGGER_URL));
     logger.info("[MAIN]","Start");
 
-    RedditPostRepository redditPoolRepository = new RedditPostRepository(POSTS_POOL_REPOSITORY, logger);
+    RedditPostRepository redditPoolRepository = new RedditPostRepository(POSTS_POOL_REPOSITORY, "postPool", logger);
 
-    RedditPostRepository redditErogatedPostRepository = new RedditPostRepository(EROGATED_POSTS_REPOSITORY, logger);
+    RedditPostRepository redditErogatedPostRepository = new RedditPostRepository(EROGATED_POSTS_REPOSITORY,"erogatedPosts", logger);
 
     RedditMessageProvider redditMessageProvider = new RedditMessageProvider(
             new DefaultHttpGetClient(REDDIT_POSTS_TARGET), logger);
