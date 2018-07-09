@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class RedditPostRepository {
 
   private final String connectionString;
@@ -71,12 +73,14 @@ public class RedditPostRepository {
 
   public Post getPostById(String id) {
     try {
-      final List<Post> posts = GetPosts();
-      final List<Post> collect = posts.stream().filter(i -> i.getId().equals(id)).collect(Collectors.toList());
-      if(collect.size() == 1){
-        return collect.get(0);
+      MongoClientURI uri = new MongoClientURI(connectionString);
+      MongoClient mongoClient = new MongoClient(uri);
+      MongoDatabase database = mongoClient.getDatabase("funfacts");
+      MongoCollection<Document> collection = database.getCollection("erogatedPosts");
+      Document doc = collection.find(eq("id", id)).first();
+      if(doc != null){
+        return PostBson.PostBsonBuilder.aPostBson().fromDocument(doc).build().toPost();
       }
-
     } catch (Exception e) {
       logger.err("repo", e.getMessage());
     }

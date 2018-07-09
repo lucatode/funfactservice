@@ -61,11 +61,9 @@ public class RedditPostRepositoryTest {
 
   @Test
   public void getPostById(){
-    String unwrapped = POST_LIST_JSON_EXAMPLE.substring(1,POST_LIST_JSON_EXAMPLE.length()-1);
-    final String[] split = unwrapped.split("\\{(.*?)\\}");
-    assertEquals(2, split.length);
+      Post post = repo.getPostById("8x3l2r");
+      assertEquals("Mistakes were made.", post.getTitle());
   }
 
-  private static String POST_LIST_JSON_EXAMPLE = "{\"-LEu3r6zdnzI0xXrmJ7W\":{\"body\":\"\",\"id\":\"8qskdm\",\"img\":\"\",\"link\":\"https://i.imgur.com/hSBelsc.gifv\",\"title\":\"I think he's okay\"},\"-LEz8XJJtmn1Tysuejn5\":{\"body\":\"\",\"id\":\"8r26on\",\"img\":\"\",\"link\":\"https://gfycat.com/WelllitWildAcornwoodpecker\",\"title\":\"Everybody down!\"}}";
 
 }
