@@ -35,19 +35,20 @@ public class RedditPostRepository {
     MongoDatabase database = mongoClient.getDatabase("funfacts");
     MongoCollection<Document> collection = database.getCollection("erogatedPosts");
     MongoCursor<Document> cursor = collection.find().iterator();
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("[");
+
+    List<Post> list = new ArrayList<>();
+
     try {
       while (cursor.hasNext()) {
-        stringBuilder.append(cursor.next().toJson());
-        stringBuilder.append(",");
+        final PostBson postBson = PostBson.PostBsonBuilder.aPostBson().fromDocument(cursor.next()).build();
+
+        list.add(postBson.toPost());
       }
     } finally {
-      stringBuilder.deleteCharAt( stringBuilder.length() - 1 );
       cursor.close();
     }
-    stringBuilder.append("]");
-    return convertToPosts(stringBuilder.toString());
+
+    return list;
   }
 
   private List<Post> convertToPosts(String postsJson) {

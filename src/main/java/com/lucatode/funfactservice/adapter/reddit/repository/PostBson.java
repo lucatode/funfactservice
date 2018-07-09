@@ -7,11 +7,11 @@ import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 public class PostBson {
-     @BsonProperty("id")    private final String id;
-     @BsonProperty("title") private final String title;
-     @BsonProperty("body")  private final String body;
-     @BsonProperty("link")  private final String link;
-     @BsonProperty("img")   private final String img;
+     @BsonProperty("id")    private String id;
+     @BsonProperty("title") private String title;
+     @BsonProperty("body")  private String body;
+     @BsonProperty("link")  private String link;
+     @BsonProperty("img")   private String img;
 
     @BsonCreator
     public PostBson(
@@ -27,6 +27,9 @@ public class PostBson {
         this.img = img;
     }
 
+    @BsonCreator
+    public PostBson(){}
+
 
     public Document toDocument(){
         return new Document("id", id)
@@ -37,7 +40,37 @@ public class PostBson {
 
     }
 
-    public static final class PostBsonBuilder {
+    public Post toPost(){
+      return new Post.PostBuilder()
+              .withId(id)
+              .withTitle(title)
+              .withBody(body)
+              .withImg(img)
+              .withLink(link)
+              .build();
+    }
+
+  public String getId() {
+    return id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public String getLink() {
+    return link;
+  }
+
+  public String getImg() {
+    return img;
+  }
+
+  public static final class PostBsonBuilder {
         private String id;
         private String title;
         private String body;
@@ -84,6 +117,15 @@ public class PostBson {
             this.link = post.getLink();
             return this;
         }
+
+    public PostBsonBuilder fromDocument(Document doc){
+      this.id = (String)doc.get("id");
+      this.body = (String)doc.get("body");
+      this.title = (String)doc.get("title");
+      this.img = (String)doc.get("img");
+      this.link = (String)doc.get("link");
+      return this;
+    }
 
         public PostBson build() {
             return new PostBson(id, title, body, link, img);
