@@ -44,7 +44,7 @@ public class RedditPostRepository {
 
     try {
       while (cursor.hasNext()) {
-        final PostBson postBson = PostBson.PostBsonBuilder.aPostBson().fromDocument(cursor.next()).build();
+        final PostBson postBson = new PostBson.PostBsonBuilder().fromDocument(cursor.next()).build();
 
         list.add(postBson.toPost());
       }
@@ -81,7 +81,7 @@ public class RedditPostRepository {
       MongoCollection<Document> collection = database.getCollection(collectionName);
       Document doc = collection.find(eq("id", id)).first();
       if(doc != null){
-        return PostBson.PostBsonBuilder.aPostBson().fromDocument(doc).build().toPost();
+        return new PostBson.PostBsonBuilder().fromDocument(doc).build().toPost();
       }
     } catch (Exception e) {
       logger.err("repo", e.getMessage());
@@ -92,7 +92,7 @@ public class RedditPostRepository {
 
   public void pushPost(Post post) {
     try{
-      Document document = PostBson.PostBsonBuilder.aPostBson().fromPost(post).build().toDocument();
+      Document document = new PostBson.PostBsonBuilder().fromPost(post).build().toDocument();
       MongoClientURI uri = new MongoClientURI(connectionString);
       MongoClient mongoClient = new MongoClient(uri);
       MongoDatabase database = mongoClient.getDatabase("funfacts");

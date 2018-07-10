@@ -1,134 +1,173 @@
 package com.lucatode.funfactservice.adapter.reddit.repository;
 
 import com.lucatode.funfactservice.domain.entity.Post;
-import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.util.Date;
+
 public class PostBson {
-     @BsonProperty("id")    private String id;
-     @BsonProperty("title") private String title;
-     @BsonProperty("body")  private String body;
-     @BsonProperty("link")  private String link;
-     @BsonProperty("img")   private String img;
+    @BsonProperty("id")
+    private String id;
+    @BsonProperty("title")
+    private String title;
+    @BsonProperty("body")
+    private String body;
+    @BsonProperty("link")
+    private String link;
+    @BsonProperty("img")
+    private String img;
+    @BsonProperty("type")
+    private String type;
+    @BsonProperty("subreddit")
+    private String subreddit;
+    @BsonProperty("timeStamp")
+    private Date timeStamp;
 
     @BsonCreator
     public PostBson(
-            @BsonProperty("id")   String id,
-            @BsonProperty("title")String title,
+            @BsonProperty("id") String id,
+            @BsonProperty("title") String title,
             @BsonProperty("body") String body,
             @BsonProperty("link") String link,
-            @BsonProperty("img")  String img) {
+            @BsonProperty("img") String img,
+            @BsonProperty("type") String type,
+            @BsonProperty("subreddit") String subreddit,
+            @BsonProperty("timeStamp") Date timeStamp
+
+    ) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.link = link;
         this.img = img;
+        this.type = type;
+        this.subreddit = subreddit;
+        this.timeStamp = timeStamp;
     }
 
     @BsonCreator
-    public PostBson(){}
+    public PostBson() {
+    }
+
+    private PostBson(PostBsonBuilder postBsonBuilder) {
+        id = postBsonBuilder.id;
+        title = postBsonBuilder.title;
+        body = postBsonBuilder.body;
+        link = postBsonBuilder.link;
+        img = postBsonBuilder.img;
+        type = postBsonBuilder.type;
+        subreddit = postBsonBuilder.subreddit;
+        timeStamp = postBsonBuilder.timeStamp;
+    }
 
 
-    public Document toDocument(){
+    public Document toDocument() {
         return new Document("id", id)
-                .append("title",title)
+                .append("title", title)
                 .append("body", body)
                 .append("link", link)
-                .append("img", img);
+                .append("img", img)
+                .append("type", type)
+                .append("subreddit", subreddit)
+                .append("timeStamp", timeStamp);
 
     }
 
-    public Post toPost(){
-      return new Post.PostBuilder()
-              .withId(id)
-              .withTitle(title)
-              .withBody(body)
-              .withImg(img)
-              .withLink(link)
-              .build();
+    public Post toPost() {
+        return new Post.PostBuilder()
+                .withId(id)
+                .withTitle(title)
+                .withBody(body)
+                .withImg(img)
+                .withLink(link)
+                .withType(type)
+                .withSubreddit(subreddit)
+                .withTimeStamp(timeStamp)
+                .build();
     }
 
-  public String getId() {
-    return id;
-  }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public String getLink() {
-    return link;
-  }
-
-  public String getImg() {
-    return img;
-  }
-
-  public static final class PostBsonBuilder {
+    public static final class PostBsonBuilder {
         private String id;
         private String title;
         private String body;
         private String link;
         private String img;
+        private String type;
+        private String subreddit;
+        private Date timeStamp;
 
-        private PostBsonBuilder() {
+        public PostBsonBuilder() {
         }
 
-        public static PostBsonBuilder aPostBson() {
-            return new PostBsonBuilder();
-        }
-
-        public PostBsonBuilder withId(String id) {
-            this.id = id;
+        public PostBsonBuilder withId(String val) {
+            id = val;
             return this;
         }
 
-        public PostBsonBuilder withTitle(String title) {
-            this.title = title;
+        public PostBsonBuilder withTitle(String val) {
+            title = val;
             return this;
         }
 
-        public PostBsonBuilder withBody(String body) {
-            this.body = body;
+        public PostBsonBuilder withBody(String val) {
+            body = val;
             return this;
         }
 
-        public PostBsonBuilder withLink(String link) {
-            this.link = link;
+        public PostBsonBuilder withLink(String val) {
+            link = val;
             return this;
         }
 
-        public PostBsonBuilder withImg(String img) {
-            this.img = img;
+        public PostBsonBuilder withImg(String val) {
+            img = val;
+            return this;
+        }
+
+        public PostBsonBuilder withType(String val) {
+            type = val;
+            return this;
+        }
+
+        public PostBsonBuilder withSubreddit(String val) {
+            subreddit = val;
+            return this;
+        }
+
+        public PostBsonBuilder withTimeStamp(Date val) {
+            timeStamp = val;
             return this;
         }
 
         public PostBsonBuilder fromPost(Post post){
-            this.id = post.getId();
-            this.body = post.getBody();
-            this.title = post.getTitle();
-            this.img = post.getImg();
-            this.link = post.getLink();
+            id = post.getId();
+            title = post.getTitle();
+            body = post.getBody();
+            link = post.getLink();
+            img = post.getImg();
+            type = post.getType();
+            subreddit = post.getSubreddit();
+            timeStamp = post.getTimeStamp();
             return this;
         }
 
-    public PostBsonBuilder fromDocument(Document doc){
-      this.id = (String)doc.get("id");
-      this.body = (String)doc.get("body");
-      this.title = (String)doc.get("title");
-      this.img = (String)doc.get("img");
-      this.link = (String)doc.get("link");
-      return this;
-    }
+        public PostBsonBuilder fromDocument(Document doc) {
+            this.id = (String) doc.get("id");
+            this.body = (String) doc.get("body");
+            this.title = (String) doc.get("title");
+            this.img = (String) doc.get("img");
+            this.link = (String) doc.get("link");
+            this.type = (String) doc.get("type");
+            this.subreddit = (String) doc.get("subreddit");
+            this.timeStamp = (Date) doc.get("timeStamp");
+            return this;
+        }
 
         public PostBson build() {
-            return new PostBson(id, title, body, link, img);
+            return new PostBson(this);
         }
     }
 }

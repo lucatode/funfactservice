@@ -1,6 +1,6 @@
 package com.lucatode.funfactservice.domain.entity;
 
-import java.util.Objects;
+import java.util.Date;
 
 public class Post {
 
@@ -9,8 +9,19 @@ public class Post {
   private String body;
   private String link;
   private String img;
+  private String type;
+  private String subreddit;
+  private Date timeStamp;
 
-  public Post() {
+  public Post(PostBuilder postBuilder) {
+    id = postBuilder.id;
+    title = postBuilder.title;
+    body = postBuilder.body;
+    link = postBuilder.link;
+    img = postBuilder.img;
+    type = postBuilder.type;
+    subreddit = postBuilder.subreddit;
+    timeStamp = postBuilder.timeStamp;
   }
 
   @Override
@@ -21,28 +32,14 @@ public class Post {
             ", body='" + body + '\'' +
             ", link='" + link + '\'' +
             ", img='" + img + '\'' +
+            ", type='" + type + '\'' +
+            ", subreddit='" + subreddit + '\'' +
+            ", timeStamp=" + timeStamp +
             '}';
   }
 
-  public String toJson(){
-    return "{\"id\":\""+this.id+"\",\"title\":\""+this.title+"\",\"body\":\""+this.body+"\",\"link\":\""+this.link+"\",\"img\":\""+this.img+"\"}";
-  }
-
-  public Post(PostBuilder builder) {
-    this.id = builder.id;
-    this.title = builder.title;
-    this.body = builder.body;
-    this.link = builder.link;
-    this.img = builder.img;
-
-  }
-
-  public Post(String id, String title, String body, String link, String img) {
-    this.id = id;
-    this.title = title;
-    this.body = body;
-    this.link = link;
-    this.img = img;
+  public String toJson() {
+    return "{\"id\":\"" + this.id + "\",\"title\":\"" + this.title + "\",\"body\":\"" + this.body + "\",\"link\":\"" + this.link + "\",\"img\":\"" + this.img + "\"}";
   }
 
   public String getId() {
@@ -65,62 +62,74 @@ public class Post {
     return img;
   }
 
-  public static class PostBuilder {
+  public String getType() {
+    return type;
+  }
+
+  public String getSubreddit() {
+    return subreddit;
+  }
+
+  public Date getTimeStamp() {
+    return timeStamp;
+  }
+
+
+  public static final class PostBuilder {
     private String id;
     private String title;
     private String body;
     private String link;
     private String img;
+    private String type;
+    private String subreddit;
+    private Date timeStamp;
 
+    public PostBuilder() {
+    }
 
-    public PostBuilder withId(String id) {
-      this.id = id;
+    public PostBuilder withId(String val) {
+      id = val;
       return this;
     }
 
-    public PostBuilder withTitle(String title) {
-      this.title = title;
+    public PostBuilder withTitle(String val) {
+      title = val;
       return this;
     }
 
-    public PostBuilder withBody(String body) {
-      this.body = body;
+    public PostBuilder withBody(String val) {
+      body = val;
       return this;
     }
 
-    public PostBuilder withLink(String link) {
-      this.link = link;
+    public PostBuilder withLink(String val) {
+      link = val;
       return this;
     }
 
-    public PostBuilder withImg(String img) {
-      this.img = img;
+    public PostBuilder withImg(String val) {
+      img = val;
+      return this;
+    }
+
+    public PostBuilder withType(String val) {
+      type = val;
+      return this;
+    }
+
+    public PostBuilder withSubreddit(String val) {
+      subreddit = val;
+      return this;
+    }
+
+    public PostBuilder withTimeStamp(Date val) {
+      timeStamp = val;
       return this;
     }
 
     public Post build() {
       return new Post(this);
     }
-
-    public String toJson(){ return ""; }
-
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Post post = (Post) o;
-    return Objects.equals(id, post.id) &&
-            Objects.equals(title, post.title) &&
-            Objects.equals(body, post.body) &&
-            Objects.equals(link, post.link) &&
-            Objects.equals(img, post.img);
-  }
-
-  @Override
-  public int hashCode() {
-
-    return Objects.hash(id, title, body, link, img);
   }
 }

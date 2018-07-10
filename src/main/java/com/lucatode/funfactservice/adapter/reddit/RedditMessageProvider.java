@@ -10,6 +10,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RedditMessageProvider implements MessageProvider {
@@ -42,6 +43,9 @@ public class RedditMessageProvider implements MessageProvider {
                                 .withBody(c.getData().getSelftext())
                                 .withImg(c.getData().getThumbnail())
                                 .withLink(c.getData().getUrl())
+                                .withTimeStamp(new Date())
+                                .withSubreddit(c.getData().getSubreddit())
+                                .withType(url)
                                 .build()
                 );
             });
