@@ -25,7 +25,8 @@ public class FunFactServiceApplication {
     Map<String, String> env = System.getenv();
     String POSTS_POOL_REPOSITORY = env.get("POSTS_POOL_REPOSITORY");
     String EROGATED_POSTS_REPOSITORY = env.get("EROGATED_POSTS_REPOSITORY");
-    String REDDIT_POSTS_TARGET = env.get("REDDIT_POSTS_TARGET");
+    String REDDIT_POSTS_TARGET_GIFS = env.get("REDDIT_POSTS_TARGET_GIFS");
+    String REDDIT_POSTS_TARGET_TECH = env.get("REDDIT_POSTS_TARGET_TECH");
     String CHANNEL_URL = env.get("CHANNEL_URL");
     String LOGGER_URL = env.get("CHANNEL_URL");
 
@@ -36,8 +37,8 @@ public class FunFactServiceApplication {
 
     RedditPostRepository redditErogatedPostRepository = new RedditPostRepository(EROGATED_POSTS_REPOSITORY,"erogatedPosts", logger);
 
-    RedditMessageProvider redditMessageProvider = new RedditMessageProvider(
-            new DefaultHttpGetClient(REDDIT_POSTS_TARGET), logger);
+    RedditMessageProvider redditMessageProviderGifs = new RedditMessageProvider(new DefaultHttpGetClient(REDDIT_POSTS_TARGET_GIFS), logger);
+    RedditMessageProvider redditMessageProviderTech = new RedditMessageProvider(new DefaultHttpGetClient(REDDIT_POSTS_TARGET_TECH), logger);
 
     PostErogator postErogator = new PostDispatcher(
             new DefaultHttpPostClient(CHANNEL_URL), logger, "reddit");
@@ -48,13 +49,27 @@ public class FunFactServiceApplication {
             new RedditTask(
                     redditErogatedPostRepository,
                     redditPoolRepository,
-                    redditMessageProvider,
+                    redditMessageProviderGifs,
                     postErogator,
                     logger,
-                    REDDIT_POSTS_TARGET
+                    REDDIT_POSTS_TARGET_GIFS
             ),
             0,
-            25,
+            30,
+            TimeUnit.MINUTES
+    );
+
+    scheduler.scheduleAtFixedRate(
+            new RedditTask(
+                    redditErogatedPostRepository,
+                    redditPoolRepository,
+                    redditMessageProviderTech,
+                    postErogator,
+                    logger,
+                    REDDIT_POSTS_TARGET_TECH
+            ),
+            0,
+            30,
             TimeUnit.MINUTES
     );
   }
