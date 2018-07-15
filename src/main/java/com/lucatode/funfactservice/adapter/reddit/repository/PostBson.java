@@ -163,6 +163,7 @@ public class PostBson {
             type = post.getType();
             subreddit = post.getSubreddit();
             timeStamp = post.getTimeStamp();
+            score = post.getScore();
             return this;
         }
 

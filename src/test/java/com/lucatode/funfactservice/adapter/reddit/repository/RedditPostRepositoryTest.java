@@ -39,7 +39,7 @@ public class RedditPostRepositoryTest {
   @Test
   public void pushPostOnRepo() throws IOException {
 
-    repo.pushPost(new Post.PostBuilder().withId("1").withTitle("Title").withBody("Body").withImg("img").withLink("Link").build());
+    repo.pushPost(new Post.PostBuilder().withId("1").withTitle("Title").withBody("Body").withImg("img").withLink("Link").withScore("12345").build());
 //    List<Post> posts = repo.GetPosts();
 //    assertEquals(1,posts.size());
   }

@@ -99,7 +99,7 @@ public class RedditPostRepository {
       MongoCollection<Document> collection = database.getCollection(collectionName);
       collection.insertOne(document);
     }catch (Exception e){
-      //
+      logger.info("RedditPostRepository", e.getMessage());
     }
   }
 }
