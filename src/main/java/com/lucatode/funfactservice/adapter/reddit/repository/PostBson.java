@@ -24,6 +24,8 @@ public class PostBson {
     private String subreddit;
     @BsonProperty("timeStamp")
     private Date timeStamp;
+    @BsonProperty("score")
+    private String score;
 
     @BsonCreator
     public PostBson(
@@ -34,8 +36,8 @@ public class PostBson {
             @BsonProperty("img") String img,
             @BsonProperty("type") String type,
             @BsonProperty("subreddit") String subreddit,
-            @BsonProperty("timeStamp") Date timeStamp
-
+            @BsonProperty("timeStamp") Date timeStamp,
+            @BsonProperty("score") String score
     ) {
         this.id = id;
         this.title = title;
@@ -45,6 +47,7 @@ public class PostBson {
         this.type = type;
         this.subreddit = subreddit;
         this.timeStamp = timeStamp;
+        this.score = score;
     }
 
     @BsonCreator
@@ -60,6 +63,7 @@ public class PostBson {
         type = postBsonBuilder.type;
         subreddit = postBsonBuilder.subreddit;
         timeStamp = postBsonBuilder.timeStamp;
+        score = postBsonBuilder.score;
     }
 
 
@@ -71,7 +75,8 @@ public class PostBson {
                 .append("img", img)
                 .append("type", type)
                 .append("subreddit", subreddit)
-                .append("timeStamp", timeStamp);
+                .append("timeStamp", timeStamp)
+                .append("score", score);
 
     }
 
@@ -85,6 +90,7 @@ public class PostBson {
                 .withType(type)
                 .withSubreddit(subreddit)
                 .withTimeStamp(timeStamp)
+                .withScore(score)
                 .build();
     }
 
@@ -98,6 +104,7 @@ public class PostBson {
         private String type;
         private String subreddit;
         private Date timeStamp;
+        private String score;
 
         public PostBsonBuilder() {
         }
@@ -142,6 +149,11 @@ public class PostBson {
             return this;
         }
 
+        public PostBsonBuilder withScore(String val) {
+            subreddit = val;
+            return this;
+        }
+
         public PostBsonBuilder fromPost(Post post){
             id = post.getId();
             title = post.getTitle();
@@ -163,6 +175,7 @@ public class PostBson {
             this.type = (String) doc.get("type");
             this.subreddit = (String) doc.get("subreddit");
             this.timeStamp = (Date) doc.get("timeStamp");
+            this.score = (String) doc.get("score");
             return this;
         }
 

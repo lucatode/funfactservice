@@ -39,7 +39,7 @@ public class RedditTask extends TimerTask {
   public void run() {
     logger.info("Reddit Task", "Starting Reddit Task");
 
-    final List<Post> posts = redditMessageProvider.GetPosts(url);
+    final List<Post> posts = redditMessageProvider.GetPostsByUps(url);
     ErogateAPost(posts);
     SaveOnPool(posts);
   }

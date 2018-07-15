@@ -24,7 +24,7 @@ public class RedditMessageProvider implements MessageProvider {
       this.logger = logger;
     }
 
-    public List<Post> GetPosts(String url) {
+    public List<Post> GetPostsByUps(String url) {
         String result = client.getGetCallResult();
         List<Post> posts = new ArrayList<>();
 
@@ -46,6 +46,7 @@ public class RedditMessageProvider implements MessageProvider {
                                 .withTimeStamp(new Date())
                                 .withSubreddit(c.getData().getSubreddit())
                                 .withType(url)
+                                .withScore(c.getData().getScore().toString())
                                 .build()
                 );
             });

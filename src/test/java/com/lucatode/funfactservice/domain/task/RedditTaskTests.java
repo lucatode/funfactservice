@@ -39,7 +39,7 @@ public class RedditTaskTests {
   @Before
   public void setup(){
     final Post abcd01 = new Post.PostBuilder().withId("ABCD01").build();
-    when(redditMessageProvider.GetPosts(any(String.class))).thenReturn(Arrays.asList(abcd01));
+    when(redditMessageProvider.GetPostsByUps(any(String.class))).thenReturn(Arrays.asList(abcd01));
     when(redditPostRepository.getPostById("ABCD01")).thenReturn(abcd01);
     doNothing().when(redditPostRepository).pushPost(abcd01);
     doNothing().when(postErogator).erogate(abcd01);
@@ -49,7 +49,7 @@ public class RedditTaskTests {
   @Test
   public void MessageProviderIsUsed(){
     redditTask.run();
-    verify(redditMessageProvider, times(1)).GetPosts(any(String.class));
+    verify(redditMessageProvider, times(1)).GetPostsByUps(any(String.class));
   }
 
   @Test

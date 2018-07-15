@@ -12,6 +12,7 @@ public class Post {
   private String type;
   private String subreddit;
   private Date timeStamp;
+  private String score;
 
   public Post(PostBuilder postBuilder) {
     id = postBuilder.id;
@@ -22,6 +23,7 @@ public class Post {
     type = postBuilder.type;
     subreddit = postBuilder.subreddit;
     timeStamp = postBuilder.timeStamp;
+    score = postBuilder.score;
   }
 
   @Override
@@ -35,11 +37,8 @@ public class Post {
             ", type='" + type + '\'' +
             ", subreddit='" + subreddit + '\'' +
             ", timeStamp=" + timeStamp +
+            ", score='" + score + '\'' +
             '}';
-  }
-
-  public String toJson() {
-    return "{\"id\":\"" + this.id + "\",\"title\":\"" + this.title + "\",\"body\":\"" + this.body + "\",\"link\":\"" + this.link + "\",\"img\":\"" + this.img + "\"}";
   }
 
   public String getId() {
@@ -74,6 +73,9 @@ public class Post {
     return timeStamp;
   }
 
+  public String getScore() {
+    return score;
+  }
 
   public static final class PostBuilder {
     private String id;
@@ -84,6 +86,7 @@ public class Post {
     private String type;
     private String subreddit;
     private Date timeStamp;
+    private String score;
 
     public PostBuilder() {
     }
@@ -128,8 +131,15 @@ public class Post {
       return this;
     }
 
+    public PostBuilder withScore(String score) {
+      this.score = score;
+      return this;
+    }
+
     public Post build() {
       return new Post(this);
     }
+
+
   }
 }

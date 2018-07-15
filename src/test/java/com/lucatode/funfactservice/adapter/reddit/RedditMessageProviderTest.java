@@ -32,7 +32,7 @@ public class RedditMessageProviderTest {
     when(client.getGetCallResult()).thenReturn(JSON_EXAMPLE);
     RedditMessageProvider redditMessageProvider = new RedditMessageProvider(client, logger);
 
-    List<Post> list = redditMessageProvider.GetPosts("");
+    List<Post> list = redditMessageProvider.GetPostsByUps("");
 
     assertEquals(list.size(), 1);
   }
@@ -42,7 +42,7 @@ public class RedditMessageProviderTest {
     String url = "https://www.reddit.com/r/gifs/new.json";
     RedditMessageProvider redditMessageProvider = new RedditMessageProvider(new DefaultHttpGetClient(url), logger);
 
-    List<Post> list = redditMessageProvider.GetPosts(url);
+    List<Post> list = redditMessageProvider.GetPostsByUps(url);
 
     for (Post post : list) {
         System.out.println(post.toString());

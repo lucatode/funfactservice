@@ -20,7 +20,7 @@ public class NineGagMessageProvider implements MessageProvider {
   }
 
   @Override
-  public List<Post> GetPosts(String url) {
+  public List<Post> GetPostsByUps(String url) {
     return null;
   }
 }
