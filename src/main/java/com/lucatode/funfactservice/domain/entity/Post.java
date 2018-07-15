@@ -131,8 +131,8 @@ public class Post {
       return this;
     }
 
-    public PostBuilder withScore(String score) {
-      this.score = score;
+    public PostBuilder withScore(String val) {
+      score = val;
       return this;
     }
 
