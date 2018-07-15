@@ -1,9 +1,8 @@
 package com.lucatode.funfactservice.adapter.reddit.repository;
 
-import com.lucatode.funfactservice.adapter.http.HttpGetClient;
-import com.lucatode.funfactservice.adapter.http.HttpPostClient;
 import com.lucatode.funfactservice.domain.entity.Post;
 import com.lucatode.funfactservice.domain.repository.Logger;
+import com.lucatode.funfactservice.domain.repository.PostRepository;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
@@ -17,11 +16,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class RedditPostRepository {
+public class RedditPostRepository implements PostRepository {
 
   private final String connectionString;
   private final String collectionName;
@@ -33,6 +31,7 @@ public class RedditPostRepository {
     this.logger = logger;
   }
 
+  @Override
   public List<Post> GetPosts() {
     MongoClientURI uri = new MongoClientURI(connectionString);
     MongoClient mongoClient = new MongoClient(uri);
@@ -73,6 +72,7 @@ public class RedditPostRepository {
     }
   }
 
+  @Override
   public Post getPostById(String id) {
     try {
       MongoClientURI uri = new MongoClientURI(connectionString);
@@ -90,6 +90,7 @@ public class RedditPostRepository {
     return null;
   }
 
+  @Override
   public void pushPost(Post post) {
     try{
       Document document = new PostBson.PostBsonBuilder().fromPost(post).build().toDocument();

@@ -4,9 +4,10 @@ import com.lucatode.funfactservice.domain.entity.Post;
 
 import java.util.List;
 
-public interface ErogatedPostDao {
+public interface PostRepository {
+    List<Post> GetPosts();
 
-    List<Post> GetErogatePosts();
-    void StoreErogatedPost(Post post);
+    Post getPostById(String id);
 
+    void pushPost(Post post);
 }
